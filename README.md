@@ -12,6 +12,12 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 <p align="center">
+  <a href="https://web.telegram.org/k/#@Nudge_AtWorkBot">
+    <img src="https://img.shields.io/badge/Telegram-@Nudge__AtWorkBot-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram Bot">
+  </a>
+</p>
+
+<p align="center">
   <strong>Stalks campus portals (Canvas LMS &amp; custom HTML) so students never miss a deadline.</strong><br>
   Detects silent due-date alterations, new assignments, and posted grades; transforms messy HTML/JSON into verified, punchy notifications; and pushes them instantly via Telegram.
 </p>
