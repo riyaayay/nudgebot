@@ -1,0 +1,54 @@
+services:
+  nudgebot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nudgebot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - DATABASE_PATH=/app/data/nudgebot.db
+      - HEALTH_PORT=8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request, sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8080/healthz').getcode() == 200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+        reservations:
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Optional backup sidecar running once every 24 hours
+  backup:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nudgebot-backup
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        while true; do
+          sleep 86400
+          echo "Running daily SQLite online backup..."
+          python scripts/backup_db.py --source /app/data/nudgebot.db --backup-dir /app/data/backups --retention-days 14
+        done
+    profiles:
+      - with-backup

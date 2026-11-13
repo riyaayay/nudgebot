@@ -1,0 +1,35 @@
+# fly.toml app configuration file generated for nudgebot on 2026-11-13T19:17:48Z
+#
+# See https://docs.fly.io/reference/configuration for information about how to use this file.
+#
+
+app = 'nudgebot'
+primary_region = 'sin'
+
+[build]
+[env]
+  DATABASE_PATH = '/app/data/nudgebot.db'
+  DEFAULT_TIMEZONE = 'Asia/Kolkata'
+  HEALTH_PORT = '8080'
+  LOG_LEVEL = 'INFO'
+
+[[mounts]]
+  source = 'nudgebot_data'
+  destination = '/app/data'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'off'
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[services]]
+  protocol = ''
+  internal_port = 0
+  ports = []
+
+[[vm]]
+  memory = '512mb'
+  cpus = 1
+  memory_mb = 512
